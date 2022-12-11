@@ -28,18 +28,33 @@ export class HighlightService {
         arr: Highlight[],
         includeDate: boolean,
         dateFormat: string,
+        includeCallouts: boolean,
+        highlightCallout: string,
+        annotationCallout: string,
     ): Map<bookTitle, Map<chapter, highlight[]>> {
         const m = new Map<string, Map<string, string[]>>()
 
         arr.forEach(x => {
             if (!x.content.bookTitle) {
-                throw new Error("bookTitle must be set")
+                throw new Error("bookTitle must be set");
+            }
+            
+            let text = ``;
+
+            if (includeCallouts) {
+                text += highlightCallout + `\n`;
+            }
+            
+            text += `> ${x.bookmark.text}`;
+
+            if (includeCallouts && x.bookmark.note) {
+                text += `\n\n` + annotationCallout + `\n> `;
+            } else {
+                text += `\n\n`;
             }
 
-            let text = `> ${x.bookmark.text}`
-
             if (x.bookmark.note) {
-                text += `\n\n${x.bookmark.note}`
+                text += `${x.bookmark.note}`;
             }
 
             if (includeDate) {
