@@ -51,6 +51,8 @@ tags:
 ![](./README_assets/step4.png)
 
 ## Obsidian Callouts
+You can turn off callouts to go back to normal markdown block quotes as well as change which callout to use for highlights and annotations.
+
 ![](./README_assets/Callout_Settings.png)
 ![](./README_assets/Callouts.png)
 
