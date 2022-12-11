@@ -51,7 +51,7 @@ tags:
 ![](./README_assets/step4.png)
 
 ## Obsidian Callouts
-![](./README_assets/Callout Settings.png)
+![](./README_assets/Callout_Settings.png)
 ![](./README_assets/Callouts.png)
 
 ## Contributing
