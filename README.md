@@ -50,6 +50,10 @@ tags:
 ![](./README_assets/step3.png)
 ![](./README_assets/step4.png)
 
+## Obsidian Callouts
+![](./README_assets/Callout Settings.png)
+![](./README_assets/Callouts.png)
+
 ## Contributing
 
 Please feel free to test, send feedbacks using Issues and open Pull Requests to improve the process. 
