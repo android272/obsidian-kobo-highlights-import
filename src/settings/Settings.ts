@@ -99,9 +99,21 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
     }
 
     add_enable_callouts(): void {
+        const desc = document.createDocumentFragment();
+        desc.append("When enabled Kobo highlights importer will make use of Obsidian callouts for highlights and annotations.",
+        desc.createEl("br"),
+        "When disabled standard markdown block quotes will be used for highlights only.",
+          desc.createEl("br"),
+          "Check the ",
+          desc.createEl("a", {
+            href: "https://help.obsidian.md/How+to/Use+callouts",
+            text: "documentation"
+          }),
+        " to get a list of all available callouts that obsidian offers.");
+
         new Setting(this.containerEl)
             .setName("Use Callouts")
-            .setDesc(`If the exported higlights should use callouts ex: '> [!quote]' & '> [!note]'`)
+            .setDesc(desc)
             .addToggle((cb) => {
                 cb.setValue(this.plugin.settings.includeCallouts)
                     .onChange((toggle) => {

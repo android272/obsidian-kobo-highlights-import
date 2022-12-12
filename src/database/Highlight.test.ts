@@ -5,11 +5,13 @@ import { binary } from '../binaries/sql-wasm';
 import { Repository } from '../database/repository';
 import { HighlightService } from './Highlight';
 import { Content } from './interfaces';
+import { KoboHighlightsImporterSettings } from "../settings/Settings";
 
 describe('HighlightService', async function () {
     let db: Database
     let repo: Repository
     let service: HighlightService
+    let settings: KoboHighlightsImporterSettings
 
     before(async function () {
         const SQLEngine = await SqlJs({
@@ -55,6 +57,7 @@ describe('HighlightService', async function () {
 
 ## Chapter Eight: Holden
 
+> [!quote]
 > “I guess I can’t be. How do you prove a negative?” — [[2022-08-05T20:46:41+00:00]]`
         )
     });
@@ -83,7 +86,137 @@ describe('HighlightService', async function () {
 
 ## Chapter Eight: Holden
 
+> [!quote]
 > “I guess I can’t be. How do you prove a negative?”`
+        )
+    });
+
+    it('fromMapToMarkdown with default annotation callout', async function () {
+        const bookmark = await repo.getBookmarkById("e7f8f92d-38ca-4556-bab8-a4d902e9c430")
+        if (!bookmark) {
+            chai.assert.isNotNull(bookmark)
+
+            return
+        }
+
+        const highlight = await service.createHilightFromBookmark(bookmark)
+        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+
+        if (!map) {
+            chai.assert.isNotNull(map)
+
+            return
+        }
+
+        const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+        chai.assert.deepEqual(
+            markdown,
+            `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> [!quote]
+> “I guess I can’t be. How do you prove a negative?”
+
+> [!note]
+> this is an annotation`
+        )
+    });
+
+    it('fromMapToMarkdown without callouts', async function () {
+        const bookmark = await repo.getBookmarkById("e7f8f92d-38ca-4556-bab8-a4d902e9c430")
+        if (!bookmark) {
+            chai.assert.isNotNull(bookmark)
+
+            return
+        }
+
+        const highlight = await service.createHilightFromBookmark(bookmark)
+        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+
+        if (!map) {
+            chai.assert.isNotNull(map)
+
+            return
+        }
+
+        this.settings.includeCallouts = false
+
+        const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+        chai.assert.deepEqual(
+            markdown,
+            `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> “I guess I can’t be. How do you prove a negative?”
+
+> this is an annotation`
+        )
+    });
+
+    it('fromMapToMarkdown with custom highlight callout', async function () {
+        const bookmark = await repo.getBookmarkById("e7f8f92d-38ca-4556-bab8-a4d902e9c430")
+        if (!bookmark) {
+            chai.assert.isNotNull(bookmark)
+
+            return
+        }
+
+        const highlight = await service.createHilightFromBookmark(bookmark)
+        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+
+        if (!map) {
+            chai.assert.isNotNull(map)
+
+            return
+        }
+
+        this.settings.highlightCallout = "> [!bug]"
+
+        const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+        chai.assert.deepEqual(
+            markdown,
+            `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> [!bug]
+> “I guess I can’t be. How do you prove a negative?”`
+        )
+    });
+
+    it('fromMapToMarkdown with custom annotation callout', async function () {
+        const bookmark = await repo.getBookmarkById("e7f8f92d-38ca-4556-bab8-a4d902e9c430")
+        if (!bookmark) {
+            chai.assert.isNotNull(bookmark)
+
+            return
+        }
+
+        const highlight = await service.createHilightFromBookmark(bookmark)
+        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+
+        if (!map) {
+            chai.assert.isNotNull(map)
+
+            return
+        }
+
+        this.settings.annotationCallout = "> [!bug]"
+
+        const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+        chai.assert.deepEqual(
+            markdown,
+            `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> [!quote]
+> “I guess I can’t be. How do you prove a negative?”
+
+> [!bug]
+> this is an annotation`
         )
     });
 
