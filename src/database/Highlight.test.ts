@@ -5,13 +5,11 @@ import { binary } from '../binaries/sql-wasm';
 import { Repository } from '../database/repository';
 import { HighlightService } from './Highlight';
 import { Content } from './interfaces';
-import { KoboHighlightsImporterSettings } from "../settings/Settings";
 
 describe('HighlightService', async function () {
     let db: Database
     let repo: Repository
     let service: HighlightService
-    let settings: KoboHighlightsImporterSettings
 
     before(async function () {
         const SQLEngine = await SqlJs({
@@ -42,7 +40,7 @@ describe('HighlightService', async function () {
         }
 
         const highlight = await service.createHilightFromBookmark(bookmark)
-        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+        const map = service.convertToMap([highlight], true, "", true, "> [!quote]", "").get(highlight.content.bookTitle ?? "")
 
         if (!map) {
             chai.assert.isNotNull(map)
@@ -71,7 +69,7 @@ describe('HighlightService', async function () {
         }
 
         const highlight = await service.createHilightFromBookmark(bookmark)
-        const map = service.convertToMap([highlight], false, "").get(highlight.content.bookTitle ?? "")
+        const map = service.convertToMap([highlight], false, "", true, "> [!quote]", "").get(highlight.content.bookTitle ?? "")
 
         if (!map) {
             chai.assert.isNotNull(map)
@@ -100,7 +98,7 @@ describe('HighlightService', async function () {
         }
 
         const highlight = await service.createHilightFromBookmark(bookmark)
-        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+        const map = service.convertToMap([highlight], true, "", true, "> [!quote]", "> [!note]").get(highlight.content.bookTitle ?? "")
 
         if (!map) {
             chai.assert.isNotNull(map)
@@ -116,10 +114,7 @@ describe('HighlightService', async function () {
 ## Chapter Eight: Holden
 
 > [!quote]
-> “I guess I can’t be. How do you prove a negative?”
-
-> [!note]
-> this is an annotation`
+> “I guess I can’t be. How do you prove a negative?” — [[2022-08-05T20:46:41+00:00]]`
         )
     });
 
@@ -132,15 +127,13 @@ describe('HighlightService', async function () {
         }
 
         const highlight = await service.createHilightFromBookmark(bookmark)
-        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+        const map = service.convertToMap([highlight], true, "", false, "", "").get(highlight.content.bookTitle ?? "")
 
         if (!map) {
             chai.assert.isNotNull(map)
 
             return
         }
-
-        this.settings.includeCallouts = false
 
         const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
         chai.assert.deepEqual(
@@ -149,9 +142,7 @@ describe('HighlightService', async function () {
 
 ## Chapter Eight: Holden
 
-> “I guess I can’t be. How do you prove a negative?”
-
-> this is an annotation`
+> “I guess I can’t be. How do you prove a negative?” — [[2022-08-05T20:46:41+00:00]]`
         )
     });
 
@@ -164,15 +155,13 @@ describe('HighlightService', async function () {
         }
 
         const highlight = await service.createHilightFromBookmark(bookmark)
-        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+        const map = service.convertToMap([highlight], true, "", true, "> [!bug]", "").get(highlight.content.bookTitle ?? "")
 
         if (!map) {
             chai.assert.isNotNull(map)
 
             return
         }
-
-        this.settings.highlightCallout = "> [!bug]"
 
         const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
         chai.assert.deepEqual(
@@ -182,7 +171,7 @@ describe('HighlightService', async function () {
 ## Chapter Eight: Holden
 
 > [!bug]
-> “I guess I can’t be. How do you prove a negative?”`
+> “I guess I can’t be. How do you prove a negative?” — [[2022-08-05T20:46:41+00:00]]`
         )
     });
 
@@ -195,15 +184,13 @@ describe('HighlightService', async function () {
         }
 
         const highlight = await service.createHilightFromBookmark(bookmark)
-        const map = service.convertToMap([highlight], true, "").get(highlight.content.bookTitle ?? "")
+        const map = service.convertToMap([highlight], true, "", true, "> [!quote]", "> [!bug]").get(highlight.content.bookTitle ?? "")
 
         if (!map) {
             chai.assert.isNotNull(map)
 
             return
         }
-
-        this.settings.annotationCallout = "> [!bug]"
 
         const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
         chai.assert.deepEqual(
@@ -213,10 +200,7 @@ describe('HighlightService', async function () {
 ## Chapter Eight: Holden
 
 > [!quote]
-> “I guess I can’t be. How do you prove a negative?”
-
-> [!bug]
-> this is an annotation`
+> “I guess I can’t be. How do you prove a negative?” — [[2022-08-05T20:46:41+00:00]]`
         )
     });
 
