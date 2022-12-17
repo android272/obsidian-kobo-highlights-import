@@ -48,7 +48,7 @@ export class HighlightService {
             text += `> ${x.bookmark.text}`;
 
             if (includeCallouts && x.bookmark.note) {
-                text += `\n\n` + annotationCallout + `\n> `;
+                text += `\n>` + annotationCallout + `\n> `;
             } else {
                 // text += `\n\n`;
             }
