@@ -36,25 +36,25 @@ export class HighlightService {
 
         arr.forEach(x => {
             if (!x.content.bookTitle) {
-                throw new Error("bookTitle must be set");
+                throw new Error("bookTitle must be set")
             }
             
             let text = ``;
 
             if (includeCallouts) {
-                text += highlightCallout + `\n`;
+                text += `> [!` + highlightCallout + `]\n`
             }
             
-            text += `> ${x.bookmark.text}`;
+            text += `> ${x.bookmark.text}`
 
             if (includeCallouts && x.bookmark.note) {
-                text += `\n\n` + annotationCallout + `\n> `;
+                text += `\n\n> [!` + annotationCallout + `]\n`
             } else {
-                text += `\n\n`;
+                text += `\n\n`
             }
 
             if (x.bookmark.note) {
-                text += `${x.bookmark.note}`;
+                text += `> ${x.bookmark.note}\n\n`;
             }
 
             if (includeDate) {

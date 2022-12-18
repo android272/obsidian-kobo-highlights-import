@@ -9,8 +9,8 @@ export const DEFAULT_SETTINGS: KoboHighlightsImporterSettings = {
     dateFormat: "YYYY-MM-DD",
     templatePath: "",
     includeCallouts: true,
-    highlightCallout: "> [!quote]",
-    annotationCallout: "> [!note]",
+    highlightCallout: "quote",
+    annotationCallout: "note",
 }
 
 export interface KoboHighlightsImporterSettings {
@@ -126,9 +126,9 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
     add_highlight_callouts_format(): void {
         new Setting(this.containerEl)
             .setName("Highlight callout format")
-            .setDesc(`The callout to use for highlights`)
+            .setDesc(`The callout to use for highlights.`)
             .addText((cb) => {
-                cb.setPlaceholder("> [!quote]")
+                cb.setPlaceholder("quote")
                     .setValue(this.plugin.settings.highlightCallout)
                     .onChange(async (toggle) => {
                         this.plugin.settings.highlightCallout = toggle;
@@ -140,9 +140,9 @@ export class KoboHighlightsImporterSettingsTab extends PluginSettingTab {
     add_annotation_callouts_format(): void {
         new Setting(this.containerEl)
             .setName("Annotation callout format")
-            .setDesc(`The callout to use for annotations`)
+            .setDesc(`The callout to use for annotations.`)
             .addText((cb) => {
-                cb.setPlaceholder("> [!note]")
+                cb.setPlaceholder("note")
                     .setValue(this.plugin.settings.annotationCallout)
                     .onChange(async (toggle) => {
                         this.plugin.settings.annotationCallout = toggle;
