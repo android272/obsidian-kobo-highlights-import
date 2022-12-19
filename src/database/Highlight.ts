@@ -58,7 +58,7 @@ export class HighlightService {
             }
 
             if (includeDate) {
-                text += ` — [[${moment(x.bookmark.dateCreated).format(dateFormat)}]]`
+                text += `— [[${moment(x.bookmark.dateCreated).format(dateFormat)}]]`
             }
 
             const existingBook = m.get(x.content.bookTitle)

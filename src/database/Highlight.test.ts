@@ -56,7 +56,7 @@ describe('HighlightService', async function () {
 
 > “I guess I can’t be. How do you prove a negative?”
 
- — [[` + dateCreatedText + `]]`
+— [[` + dateCreatedText + `]]`
                 )
             })
 
@@ -100,6 +100,29 @@ describe('HighlightService', async function () {
 > “I guess I can’t be. How do you prove a negative?”`
                 )
             })
+
+            it('fromMaptoMarkdown with callouts and date', async function () {
+                const map = service
+                    .convertToMap([highlight], true, "", true, 'quote', 'note')
+                    .get(highlight.content.bookTitle ?? "")
+
+                if(!map) {
+                    chai.assert.isNotNull(map)
+                    return
+                }
+
+                const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+                chai.assert.deepEqual(
+                    markdown, `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> [!quote]
+> “I guess I can’t be. How do you prove a negative?”
+
+— [[` + dateCreatedText + `]]`
+                )
+            })
             
             it('fromMaptoMarkdown with custom callouts', async function () {
                 const map = service
@@ -119,6 +142,29 @@ describe('HighlightService', async function () {
 
 > [!bug]
 > “I guess I can’t be. How do you prove a negative?”`
+                )
+            })
+
+            it('fromMaptoMarkdown with custom callouts and date', async function () {
+                const map = service
+                    .convertToMap([highlight], true, "", true, 'bug', 'note')
+                    .get(highlight.content.bookTitle ?? "")
+
+                if(!map) {
+                    chai.assert.isNotNull(map)
+                    return
+                }
+
+                const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+                chai.assert.deepEqual(
+                    markdown, `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> [!bug]
+> “I guess I can’t be. How do you prove a negative?”
+
+— [[` + dateCreatedText + `]]`
                 )
             })
         })
@@ -160,7 +206,7 @@ describe('HighlightService', async function () {
 
 > This is a great note!
 
- — [[` + dateCreatedText + `]]`
+— [[` + dateCreatedText + `]]`
                 )
             })
 
@@ -210,6 +256,32 @@ describe('HighlightService', async function () {
                 )
             })
             
+            it('fromMaptoMarkdown with callouts and date', async function () {
+                const map = service
+                    .convertToMap([highlight], true, "", true, 'quote', 'note')
+                    .get(highlight.content.bookTitle ?? "")
+
+                if(!map) {
+                    chai.assert.isNotNull(map)
+                    return
+                }
+
+                const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+                chai.assert.deepEqual(
+                    markdown, `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> [!quote]
+> “I guess I can’t be. How do you prove a negative?”
+
+> [!note]
+> This is a great note!
+
+— [[` + dateCreatedText + `]]`
+                )
+            })
+
             it('fromMaptoMarkdown with custom callouts', async function () {
                 const map = service
                     .convertToMap([highlight], false, "", true, 'quote', 'bug')
@@ -231,6 +303,32 @@ describe('HighlightService', async function () {
 
 > [!bug]
 > This is a great note!`
+                )
+            })
+
+            it('fromMaptoMarkdown with custom callouts and date', async function () {
+                const map = service
+                    .convertToMap([highlight], true, "", true, 'quote', 'bug')
+                    .get(highlight.content.bookTitle ?? "")
+
+                if(!map) {
+                    chai.assert.isNotNull(map)
+                    return
+                }
+
+                const markdown = service.fromMapToMarkdown(highlight.content.bookTitle ?? "", map)
+                chai.assert.deepEqual(
+                    markdown, `# Nemesis Games
+
+## Chapter Eight: Holden
+
+> [!quote]
+> “I guess I can’t be. How do you prove a negative?”
+
+> [!bug]
+> This is a great note!
+
+— [[` + dateCreatedText + `]]`
                 )
             })
         })
